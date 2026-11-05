@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Universal Shopping Expert System</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f3f4f6; /* gray-100 */
+        }
+        /* Custom scrollbar for table */
+        .table-scroll::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .table-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        .table-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .selected-row {
+            background-color: #eff6ff !important; /* blue-50 */
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm px-6 py-4 flex-shrink-0 z-10">
+        <h1 class="text-2xl font-bold text-slate-900 flex items-center">
+            <span class="mr-2">🛒</span> AI Universal Shopping Expert System
+        </h1>
+        <p class="text-slate-500 text-sm mt-1">Rule-based AI system for intelligent product recommendations</p>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden max-w-7xl mx-auto w-full p-4 md:p-6 gap-6">
+        
+        <!-- Left Sidebar (Inputs) -->
+        <aside class="w-full md:w-80 bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col flex-shrink-0 overflow-y-auto">
+            <div class="p-5 border-b border-slate-100 font-semibold text-lg">
+                Shopping Requirements
+            </div>
+            
+            <div class="p-5 space-y-5 flex-1">
+                <!-- Category -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Product Category:</label>
+                    <select id="input-category" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="Any">Any</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Home">Home</option>
+                        <option value="Fashion">Fashion</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Pet">Pet</option>
+                        <option value="Garden">Garden</option>
+                    </select>
+                </div>
+
+                <!-- Budget -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Maximum Budget (₹):</label>
+                    <input type="number" id="input-budget" value="50000" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                </div>
+
+                <!-- Purpose -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Purpose:</label>
+                    <select id="input-purpose" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="Any">Any</option>
+                        <option value="Study">Study</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Professional">Professional</option>
+                        <option value="General">General</option>
+                        <option value="Photography">Photography</option>
+                        <option value="Music">Music</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Fitness">Fitness</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Home">Home</option>
+                        <option value="Kitchen">Kitchen</option>
+                        <option value="Office">Office</option>
+                        <option value="Casual">Casual</option>
+                        <option value="Formal">Formal</option>
+                        <option value="Walking">Walking</option>
+                        <option value="Gardening">Gardening</option>
+                        <option value="Pet">Pet</option>
+                    </select>
+                </div>
+
+                <!-- Brand -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Preferred Brand:</label>
+                    <select id="input-brand" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="Any">Any</option>
+                        <option value="Apple">Apple</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="Sony">Sony</option>
+                        <option value="LG">LG</option>
+                        <option value="Dell">Dell</option>
+                        <option value="HP">HP</option>
+                        <option value="Lenovo">Lenovo</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="Acer">Acer</option>
+                        <option value="OnePlus">OnePlus</option>
+                        <option value="Xiaomi">Xiaomi</option>
+                        <option value="Nike">Nike</option>
+                        <option value="Adidas">Adidas</option>
+                        <option value="Puma">Puma</option>
+                        <option value="IKEA">IKEA</option>
+                        <option value="Philips">Philips</option>
+                        <option value="Whirlpool">Whirlpool</option>
+                        <option value="Canon">Canon</option>
+                        <option value="Nikon">Nikon</option>
+                    </select>
+                </div>
+
+                <!-- Quality -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Minimum Quality:</label>
+                    <select id="input-quality" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="Any">Any</option>
+                        <option value="Good">Good</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Excellent">Excellent</option>
+                    </select>
+                </div>
+
+                <!-- Feature -->
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1">Required Feature:</label>
+                    <select id="input-feature" class="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm">
+                        <option value="Any">Any</option>
+                        <option value="gaming">gaming</option>
+                        <option value="performance">performance</option>
+                        <option value="battery">battery</option>
+                        <option value="camera">camera</option>
+                        <option value="5g">5g</option>
+                        <option value="wireless">wireless</option>
+                        <option value="noise-cancellation">noise-cancellation</option>
+                        <option value="microphone">microphone</option>
+                        <option value="premium">premium</option>
+                        <option value="lightweight">lightweight</option>
+                        <option value="energy-efficient">energy-efficient</option>
+                        <option value="4k">4k</option>
+                        <option value="smart">smart</option>
+                        <option value="running">running</option>
+                        <option value="comfortable">comfortable</option>
+                        <option value="office">office</option>
+                        <option value="student">student</option>
+                        <option value="travel">travel</option>
+                        <option value="fitness">fitness</option>
+                        <option value="health">health</option>
+                        <option value="durable">durable</option>
+                        <option value="cooking">cooking</option>
+                        <option value="budget">budget</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="p-5 border-t border-slate-100 space-y-3 bg-slate-50 rounded-b-xl">
+                <button onclick="findProducts()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                    🔍 Find Products
+                </button>
+                <button onclick="resetInputs()" class="w-full bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                    ↻ Reset
+                </button>
+                <button onclick="viewAllProducts()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                    📊 View All Products
+                </button>
+            </div>
+        </aside>
+
+        <!-- Right Main Area -->
+        <section class="flex-1 flex flex-col min-w-0 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            
+            <div class="p-4 border-b border-slate-100 font-semibold text-lg flex justify-between items-center bg-slate-50">
+                <span>AI Recommendations</span>
+                <span id="results-count" class="text-sm font-normal text-slate-500">0 results</span>
+            </div>
+            
+            <!-- Table Container -->
+            <div class="flex-1 overflow-auto table-scroll relative">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead class="bg-slate-50 sticky top-0 shadow-sm z-10">
+                        <tr>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200 w-16 text-center">Rank</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200">Product</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200">Category</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200">Brand</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200 text-right">Price</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200 text-center">Rating</th>
+                            <th class="p-3 text-sm font-bold text-slate-600 border-b border-slate-200 text-center">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table-body" class="divide-y divide-slate-100">
+                        <!-- Rows injected via JS -->
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-slate-500">
+                                Enter your shopping requirements and click 'Find Products'.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Explanation Panel -->
+            <div class="h-64 border-t border-slate-200 bg-slate-50 flex flex-col flex-shrink-0">
+                <div class="p-3 border-b border-slate-200 font-semibold text-slate-700 bg-slate-100 text-sm">
+                    Recommendation Explanation
+                </div>
+                <div class="p-4 flex-1 overflow-y-auto font-mono text-sm whitespace-pre-wrap text-slate-700" id="explanation-panel">Select a product above to see why the AI recommended it.</div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JavaScript App Logic -->
+    <script>
+        // ============================================================
+        // DATABASE
+        // ============================================================
+        const products = [
+            // Laptops
+            { id: 1, name: "HP 15s", category: "Electronics", subcategory: "Laptop", brand: "HP", price: 42999, rating: 4.2, purpose: "Study", quality: "Good", features: "lightweight,student,office,battery" },
+            { id: 3, name: "Dell Inspiron 15", category: "Electronics", subcategory: "Laptop", brand: "Dell", price: 54999, rating: 4.4, purpose: "Study", quality: "Very Good", features: "student,office,battery,performance" },
+            { id: 6, name: "ASUS TUF Gaming F15", category: "Electronics", subcategory: "Laptop", brand: "ASUS", price: 69999, rating: 4.6, purpose: "Gaming", quality: "Excellent", features: "gaming,performance,gpu,high-performance" },
+            { id: 10, name: "MacBook Air M3", category: "Electronics", subcategory: "Laptop", brand: "Apple", price: 109999, rating: 4.8, purpose: "Professional", quality: "Excellent", features: "premium,lightweight,battery,performance,professional" },
+            // Smartphones
+            { id: 12, name: "Samsung Galaxy A35", category: "Electronics", subcategory: "Smartphone", brand: "Samsung", price: 27999, rating: 4.4, purpose: "General", quality: "Very Good", features: "camera,battery,display,5g" },
+            { id: 15, name: "Google Pixel", category: "Electronics", subcategory: "Smartphone", brand: "Google", price: 59999, rating: 4.6, purpose: "Photography", quality: "Excellent", features: "camera,photography,ai,5g" },
+            { id: 16, name: "iPhone 16", category: "Electronics", subcategory: "Smartphone", brand: "Apple", price: 79999, rating: 4.8, purpose: "General", quality: "Excellent", features: "premium,camera,performance,5g" },
+            // Headphones & Watches
+            { id: 20, name: "Sony WH Series", category: "Electronics", subcategory: "Headphones", brand: "Sony", price: 12999, rating: 4.7, purpose: "Music", quality: "Excellent", features: "music,noise-cancellation,premium,wireless" },
+            { id: 25, name: "Apple Watch", category: "Electronics", subcategory: "Smartwatch", brand: "Apple", price: 44999, rating: 4.8, purpose: "Fitness", quality: "Excellent", features: "fitness,health,premium,smart" },
+            // Home / Appliances
+            { id: 29, name: "LG Double Door Refrigerator", category: "Home", subcategory: "Refrigerator", brand: "LG", price: 45999, rating: 4.5, purpose: "Home", quality: "Very Good", features: "energy-efficient,double-door,large" },
+            { id: 32, name: "LG Front Load Washing Machine", category: "Home", subcategory: "Washing Machine", brand: "LG", price: 37999, rating: 4.6, purpose: "Home", quality: "Excellent", features: "front-load,energy-efficient,smart" },
+            { id: 35, name: "LG 1.5 Ton AC", category: "Home", subcategory: "Air Conditioner", brand: "LG", price: 42999, rating: 4.5, purpose: "Home", quality: "Very Good", features: "energy-efficient,inverter,cooling" },
+            // Fashion / Shoes
+            { id: 38, name: "Nike Running Shoes", category: "Fashion", subcategory: "Shoes", brand: "Nike", price: 5999, rating: 4.6, purpose: "Sports", quality: "Excellent", features: "running,sports,comfortable,lightweight" },
+            { id: 42, name: "Levi's Jeans", category: "Fashion", subcategory: "Jeans", brand: "Levi's", price: 2999, rating: 4.5, purpose: "Casual", quality: "Very Good", features: "casual,durable,fashion" },
+            // Furniture
+            { id: 45, name: "IKEA Study Desk", category: "Furniture", subcategory: "Desk", brand: "IKEA", price: 7999, rating: 4.5, purpose: "Study", quality: "Very Good", features: "study,office,wooden,compact" },
+            { id: 47, name: "Premium Office Chair", category: "Furniture", subcategory: "Chair", brand: "Ergo", price: 14999, rating: 4.7, purpose: "Office", quality: "Excellent", features: "office,comfortable,ergonomic,premium" },
+            // Sports / Fitness
+            { id: 49, name: "Yoga Mat", category: "Sports", subcategory: "Fitness", brand: "Boldfit", price: 999, rating: 4.3, purpose: "Fitness", quality: "Good", features: "yoga,budget,lightweight" },
+            { id: 51, name: "Treadmill", category: "Sports", subcategory: "Fitness", brand: "Lifelong", price: 24999, rating: 4.4, purpose: "Fitness", quality: "Very Good", features: "running,gym,home" },
+            // Gaming
+            { id: 56, name: "PlayStation 5", category: "Gaming", subcategory: "Console", brand: "Sony", price: 49999, rating: 4.9, purpose: "Gaming", quality: "Excellent", features: "gaming,console,performance" },
+            // Kitchen
+            { id: 62, name: "Philips Air Fryer", category: "Home", subcategory: "Kitchen", brand: "Philips", price: 6999, rating: 4.5, purpose: "Kitchen", quality: "Very Good", features: "kitchen,healthy,cooking" },
+            // Pet & Garden
+            { id: 65, name: "Premium Pet Bed", category: "Pet", subcategory: "Pet Supplies", brand: "PetSafe", price: 4999, rating: 4.6, purpose: "Pet", quality: "Excellent", features: "pet,comfortable,premium" },
+            { id: 67, name: "Premium Garden Tool Set", category: "Garden", subcategory: "Gardening", brand: "Bosch", price: 4999, rating: 4.6, purpose: "Gardening", quality: "Excellent", features: "garden,tools,premium,durable" }
+        ];
+
+        // Global State
+        let currentResults = [];
+
+        // ============================================================
+        // LOGIC
+        // ============================================================
+
+        function calculateScore(product, userData) {
+            let score = 0;
+            let reasons = [];
+            const featuresList = product.features.split(",").map(f => f.trim().toLowerCase());
+
+            // 1. Budget Rule
+            const budget = userData.budget;
+            if (product.price <= budget) {
+                score += 30;
+                reasons.push("Product is within your budget.");
+            } else {
+                const diff = product.price - budget;
+                if (diff <= budget * 0.10) {
+                    score += 10;
+                    reasons.push("Product is slightly above your budget.");
+                } else {
+                    score -= 20;
+                }
+            }
+
+            // 2. Category Rule
+            if (userData.category === "Any") {
+                score += 5;
+            } else if (product.category.toLowerCase() === userData.category.toLowerCase()) {
+                score += 20;
+                reasons.push(`Matches your selected category: ${product.category}.`);
+            } else {
+                score -= 30;
+            }
+
+            // 3. Purpose Rule
+            if (userData.purpose === "Any") {
+                score += 5;
+            } else if (product.purpose.toLowerCase() === userData.purpose.toLowerCase()) {
+                score += 20;
+                reasons.push(`Suitable for ${userData.purpose.toLowerCase()}.`);
+            } else if (featuresList.includes(userData.purpose.toLowerCase())) {
+                score += 12;
+                reasons.push(`Supports your ${userData.purpose.toLowerCase()} requirement.`);
+            }
+
+            // 4. Brand Rule
+            if (userData.brand === "Any") {
+                score += 5;
+            } else if (product.brand.toLowerCase() === userData.brand.toLowerCase()) {
+                score += 15;
+                reasons.push(`Matches your preferred brand: ${product.brand}.`);
+            }
+
+            // 5. Quality Rule
+            const qualityScores = { "Any": 0, "Good": 5, "Very Good": 10, "Excellent": 15 };
+            const uQuality = userData.quality;
+            const pQuality = product.quality;
+
+            if (uQuality === "Any") {
+                score += 3;
+            } else {
+                const reqScore = qualityScores[uQuality] || 0;
+                const actScore = qualityScores[pQuality] || 0;
+                
+                if (uQuality === pQuality) {
+                    score += 15;
+                    reasons.push(`Matches your preferred quality level: ${uQuality}.`);
+                } else if (uQuality === "Good" && ["Good", "Very Good", "Excellent"].includes(pQuality)) {
+                    score += 8;
+                    reasons.push("Meets your minimum quality requirement.");
+                } else if (uQuality === "Very Good" && ["Very Good", "Excellent"].includes(pQuality)) {
+                    score += 10;
+                    reasons.push("Meets your quality requirement.");
+                }
+            }
+
+            // 6. Rating Rule
+            if (product.rating >= 4.7) {
+                score += 15;
+                reasons.push("Highly rated product.");
+            } else if (product.rating >= 4.4) {
+                score += 10;
+                reasons.push("Well-rated product.");
+            } else if (product.rating >= 4.0) {
+                score += 5;
+            }
+
+            // 7. Feature Rule
+            const feature = userData.feature;
+            if (feature !== "Any") {
+                if (featuresList.includes(feature.toLowerCase())) {
+                    score += 15;
+                    reasons.push(`Has the requested feature: ${feature}.`);
+                } else {
+                    score -= 5;
+                }
+            }
+
+            // Final Score clamp
+            score = Math.max(0, Math.min(score, 100));
+
+            return { score, reasons };
+        }
+
+        // ============================================================
+        // UI INTERACTION
+        // ============================================================
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        function findProducts() {
+            const budgetVal = parseInt(document.getElementById('input-budget').value, 10);
+            if (isNaN(budgetVal) || budgetVal <= 0) {
+                alert("Please enter a valid budget.");
+                return;
+            }
+
+            const userData = {
+                category: document.getElementById('input-category').value,
+                budget: budgetVal,
+                purpose: document.getElementById('input-purpose').value,
+                brand: document.getElementById('input-brand').value,
+                quality: document.getElementById('input-quality').value,
+                feature: document.getElementById('input-feature').value
+            };
+
+            let results = [];
+            products.forEach(product => {
+                const evalResult = calculateScore(product, userData);
+                if (evalResult.score > 20) {
+                    results.push({
+                        product: product,
+                        score: evalResult.score,
+                        reasons: evalResult.reasons
+                    });
+                }
+            });
+
+            // Sort by score (desc), then rating (desc)
+            results.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return b.product.rating - a.product.rating;
+            });
+
+            // Keep top 10
+            currentResults = results.slice(0, 10);
+            renderTable(currentResults);
+        }
+
+        function viewAllProducts() {
+            currentResults = products.map(p => ({ product: p, score: '-', reasons: [] }));
+            renderTable(currentResults, true);
+            document.getElementById('explanation-panel').textContent = `Database contains ${products.length} products across multiple shopping categories.`;
+        }
+
+        function resetInputs() {
+            document.getElementById('input-category').value = 'Any';
+            document.getElementById('input-budget').value = '50000';
+            document.getElementById('input-purpose').value = 'Any';
+            document.getElementById('input-brand').value = 'Any';
+            document.getElementById('input-quality').value = 'Any';
+            document.getElementById('input-feature').value = 'Any';
+            
+            currentResults = [];
+            renderTable([]);
+            document.getElementById('explanation-panel').textContent = "Enter your shopping requirements and click 'Find Products'.";
+        }
+
+        function renderTable(results, isViewAll = false) {
+            const tbody = document.getElementById('results-table-body');
+            const countEl = document.getElementById('results-count');
+            tbody.innerHTML = '';
+            countEl.textContent = `${results.length} result${results.length !== 1 ? 's' : ''}`;
+
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-8 text-center text-slate-500">
+                            No suitable products were found.<br>Try increasing your budget or selecting fewer requirements.
+                        </td>
+                    </tr>`;
+                document.getElementById('explanation-panel').textContent = "";
+                return;
+            }
+
+            if (!isViewAll) {
+                document.getElementById('explanation-panel').textContent = `Found ${results.length} matching products.\n\nSelect a product above to see why the AI recommended it.`;
+            }
+
+            results.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 cursor-pointer transition-colors border-b border-slate-100 last:border-0";
+                tr.onclick = () => {
+                    // Remove selected styling from all
+                    document.querySelectorAll('#results-table-body tr').forEach(row => row.classList.remove('selected-row'));
+                    tr.classList.add('selected-row');
+                    if (!isViewAll) showDetails(item);
+                };
+
+                const p = item.product;
+                tr.innerHTML = `
+                    <td class="p-3 text-sm text-slate-600 text-center">${index + 1}</td>
+                    <td class="p-3 text-sm font-medium text-slate-900">${p.name}</td>
+                    <td class="p-3 text-sm text-slate-600">${p.category}</td>
+                    <td class="p-3 text-sm text-slate-600">${p.brand}</td>
+                    <td class="p-3 text-sm text-slate-800 text-right font-medium">${formatCurrency(p.price)}</td>
+                    <td class="p-3 text-sm text-slate-600 text-center">${p.rating.toFixed(1)}/5</td>
+                    <td class="p-3 text-sm font-bold text-center ${item.score >= 80 ? 'text-green-600' : (item.score >= 50 ? 'text-blue-600' : 'text-slate-600')}">${item.score}${item.score !== '-' ? '%' : ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showDetails(item) {
+            const p = item.product;
+            let text = `🤖 AI EXPERT SYSTEM ANALYSIS\n==================================================\n\n`;
+            text += `Product: ${p.name}\n`;
+            text += `Category: ${p.category}\n`;
+            text += `Subcategory: ${p.subcategory}\n`;
+            text += `Brand: ${p.brand}\n`;
+            text += `Price: ${formatCurrency(p.price)}\n`;
+            text += `Rating: ${p.rating}/5\n`;
+            text += `Purpose: ${p.purpose}\n`;
+            text += `Quality: ${p.quality}\n\n`;
+            text += `AI MATCH SCORE: ${item.score}%\n\n`;
+            text += `Why this product was recommended:\n`;
+            item.reasons.forEach(r => {
+                text += `✓ ${r}\n`;
+            });
+            text += `\nProduct Features:\n`;
+            p.features.split(',').forEach(f => {
+                text += `• ${f.trim().charAt(0).toUpperCase() + f.trim().slice(1)}\n`;
+            });
+            document.getElementById('explanation-panel').textContent = text;
+        }
+
+    </script>
+</body>
+</html>
